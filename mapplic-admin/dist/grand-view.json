@@ -1,0 +1,195 @@
+{
+  "settings": {
+    "mapWidth": "1300",
+    "mapHeight": 1000,
+    "maxZoom": "3",
+    "hoverTooltip": true,
+    "sidebar": true,
+    "layerSwitcher": "bottom-left",
+    "resetButton": "bottom-right",
+    "zoomButtons": "bottom-right",
+    "height": "",
+    "filters": true,
+    "thumbnails": true,
+    "ordered": false,
+    "title": "Residential lots",
+    "csv": "",
+    "sidebarWidth": "30%",
+    "layer": "lot-map",
+    "portrait": "600",
+    "zoom": true,
+    "toggleSidebar": true,
+    "sidebarClosed": false,
+    "primaryColor": "",
+    "portraitMinHeight": "400px",
+    "fullscreen": "top-left",
+    "moreText": "Reserve",
+    "csvEnabled": false,
+    "rightSidebar": true
+  },
+  "groups": [
+    {
+      "id": "available",
+      "name": "Available",
+      "color": "#62b07b"
+    },
+    {
+      "id": "reserved",
+      "name": "Reserved",
+      "color": "#edd955",
+      "hide": false
+    },
+    {
+      "id": "sold",
+      "name": "Sold",
+      "color": "#e38878"
+    }
+  ],
+  "layers": [
+    {
+      "id": "lot-map",
+      "file": "assets/maps/lots.svg",
+      "name": "Mapa de lotes"
+    }
+  ],
+  "locations": [
+    {
+      "id": "def",
+      "group": [
+        "Available"
+      ],
+      "sample": "true",
+      "style": "available",
+      "about": "{{area}} m2",
+      "desc": "<p>Lote disponible!</p><p>Area: <strong>{{area}} m2</strong></p><p>Price: <strong>${{price}}</strong></p><p></p><p>Contactanos y reservalo ahora mismo!</p>",
+      "action": "sidebar",
+      "color": "#54b376",
+      "image": "assets/lot-image.png",
+      "link": "https://bloque9.com",
+      "title": "Valores por default"
+    },
+    {
+      "id": "reserved",
+      "desc": "<h4>Lote reservado!</h4>",
+      "layer": "lot-map",
+      "sample": "true",
+      "style": "reserved",
+      "action": "tooltip",
+      "group": [
+        "Reserved"
+      ],
+      "type": "circle",
+      "color": "#d3e68e",
+      "disable": false,
+      "title": "Template reservado"
+    },
+    {
+      "id": "sold",
+      "desc": "<p>Este lote ya no esta disponible.</p>",
+      "title": "Template vendido",
+      "layer": "lot-map",
+      "sample": "true",
+      "style": "sold",
+      "group": [
+        "Sold"
+      ],
+      "action": "tooltip",
+      "color": "#ffc8c8",
+      "type": "circle"
+    },
+    {
+      "id": "l25-p1",
+      "title": "Lote 25",
+      "thumb": "25",
+      "label": "25",
+      "area": "1460",
+      "price": "87600",
+      "sample": "sold",
+      "coord": [
+        0.4722,
+        0.2652
+      ],
+      "zoom": 7.0961,
+      "layer": "lot-map"
+    },
+    {
+      "id": "l27-p1",
+      "title": "Lote 27",
+      "thumb": "27",
+      "label": "27",
+      "area": "2180",
+      "price": "130800",
+      "sample": "",
+      "coord": [
+        0.4782,
+        0.3927
+      ],
+      "zoom": 8.0197,
+      "layer": "lot-map",
+      "image": "assets/locations/b5d924fe5b48a43a53a8fa18e8e587ff.jpg"
+    },
+    {
+      "id": "l11-p2",
+      "title": "Lote 11",
+      "thumb": "11",
+      "label": "11",
+      "area": "2390",
+      "price": "143400",
+      "sample": "reserved",
+      "coord": [
+        0.5557,
+        0.1345
+      ],
+      "zoom": 6.1501,
+      "layer": "lot-map"
+    }
+  ],
+  "filters": [
+    {
+      "id": "f1675157277423",
+      "name": "Status",
+      "type": "tags"
+    }
+  ],
+  "styles": [
+    {
+      "class": "available",
+      "svg": true,
+      "marker": true,
+      "stroke-width": "0.5",
+      "hover-color": "#91d8ab",
+      "active-color": "#54b376",
+      "base-color": "#91d8ab"
+    },
+    {
+      "class": "reserved",
+      "svg": false,
+      "marker": true,
+      "hover-color": "#f4edbe",
+      "active-color": "#f4edbe",
+      "base-color": "#f4edbe"
+    },
+    {
+      "class": "sold",
+      "svg": false,
+      "marker": true,
+      "active-color": "#f0c0b7",
+      "stroke-width": "0.5",
+      "text-color": "#fff",
+      "hover-color": "#f0c0b7",
+      "base-color": "#f0c0b7"
+    }
+  ],
+  "breakpoints": [
+    {
+      "name": "Mobile",
+      "below": 480,
+      "portrait": true
+    },
+    {
+      "name": "All screens",
+      "below": 8000
+    }
+  ],
+  "routes": []
+}
