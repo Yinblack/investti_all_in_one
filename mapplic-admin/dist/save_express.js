@@ -56,6 +56,8 @@ app.post('/create-map', async (req, res) => {
         await new Promise(resolve => req.on('end', resolve));
         const parsedBody = JSON.parse(body);
         const { name } = parsedBody;
+        console.log('name===>');
+        console.log(name);
         const formattedName = name.replace(/ /g, '-').toLowerCase();
         const sourceFilePath = './templates/data-lots.json';
         const targetFilePath = `${formattedName}.json`;
