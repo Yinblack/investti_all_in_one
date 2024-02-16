@@ -1,5 +1,4 @@
-./mapplic-admin/dist/
-./mapplic-admin/node_modules/
+mapplic-admin/dist/
+mapplic-admin/node_modules/
 
-./mapplic/dist/
-./mapplic/node_modules/
+mapplic/dist/
