@@ -318,7 +318,7 @@ const DemoMap = ({ title, desc, url }) => {
   const location = useLocation();
   const isActive = location.search.includes(`?map=${url}`);
   const handleClick = () => {
-    window.location.href = `/admin?map=${url}`;
+    window.location.href = `/?map=${url}`;
   };
   const mapStyle = {
     cursor: 'pointer',
