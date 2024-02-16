@@ -65,7 +65,7 @@ const App = () => {
       <React.StrictMode>
         <Router>
           <Routes>
-            <Route path="admin" element={<Dash />}>
+            <Route path="/" element={<Dash />}>
               <Route index element={<MapplicAdmin json={searchParams.get('map') || undefined} logo={true} />} />
             </Route>
             {mapas.map((mapa, index) => {
