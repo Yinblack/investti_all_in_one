@@ -288,7 +288,7 @@ const MapLink = ({id, map, file}) => {
 	
 	const createMap = async () => {
 		try {
-			await fetch('http://localhost:3000/mapplic-save', {
+			await fetch('http://143.110.228.33:3000/mapplic-save', {
 				mode: 'no-cors',
 				method: 'POST',
 				headers: {
