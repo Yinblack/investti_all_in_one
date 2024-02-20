@@ -373,13 +373,9 @@ function formatFileName(fileName) {
 /*USERS*/
 // Ruta para autenticación y generación de token
 app.post('/login', (req, res) => {
-
-  console.log('Directorio de trabajo=========>');
-  console.log(process.cwd());
-
   const { username, password } = req.body;
 
-  const usersFilePath = './dist/users.json';
+  const usersFilePath = './users.json';
   let users = [];
   
   try {
