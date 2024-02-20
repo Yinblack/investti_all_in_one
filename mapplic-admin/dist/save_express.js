@@ -379,7 +379,7 @@ app.post('/login', (req, res) => {
 
   const { username, password } = req.body;
 
-  const usersFilePath = './users.json';
+  const usersFilePath = './dist/users.json';
   let users = [];
   
   try {
