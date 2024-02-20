@@ -375,7 +375,7 @@ function formatFileName(fileName) {
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
 
-  const usersFilePath = './users.json';
+  const usersFilePath = 'users.json';
   let users = [];
   
   try {
