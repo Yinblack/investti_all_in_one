@@ -3,6 +3,9 @@ import commonConfig from './vite.config.common';
 
 export default defineConfig({
   ...commonConfig,
+  define: {
+    'import.meta.env.REACT_APP_API_CALLS': JSON.stringify(process.env.REACT_APP_API_CALLS)
+  },
   base: '',
   build: {
     chunkSizeWarningLimit: 800,
