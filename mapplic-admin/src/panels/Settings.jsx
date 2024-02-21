@@ -49,6 +49,7 @@ export const Settings = forwardRef(({setOpened, updateSetting, updateList}, ref)
 							<Switch label="Hover about" active={data.settings.hoverTooltip} value={data.settings.hoverAbout || false} onChange={checked => updateSetting('hoverAbout', checked)} />
 							<Switch label="Deeplinking" value={data.settings.deeplinking || false} onChange={checked => updateSetting('deeplinking', checked)} />
 							<Input label="Padding" type="number" min="0" value={data.settings.padding} suffix="PX" onChange={(val, step) => updateSetting('padding', parseFloat(val), step)} placeholder="0" />
+							<Input label="URL de sincronización" type="text" value={data.settings.import_url} onChange={(val) => updateSetting('import_url', val)} />
 							<Switch label="Accessibility" value={data.settings.accessibility || false} values={{true: 'Plus', false: 'Normal'}} onChange={val => updateSetting('accessibility', val)}/>
 						</div>
 					</div>
