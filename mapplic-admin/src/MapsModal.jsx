@@ -230,7 +230,6 @@ export const MapsModal = ({open, setOpen, data}) => {
         				  id="type"
         				  name="type"
         				  select
-        				  fullWidth 
         				  label="Icono de los puntos"
                   error={Boolean(touched.type && errors.type)}
                   fullWidth
@@ -254,7 +253,6 @@ export const MapsModal = ({open, setOpen, data}) => {
         				  fullWidth 
         				  label="Acción al hacer clic en un punto"
                   error={Boolean(touched.action && errors.action)}
-                  fullWidth
                   helperText={touched.action && errors.action}
                   onBlur={handleBlur}
                   onChange={handleChange}
