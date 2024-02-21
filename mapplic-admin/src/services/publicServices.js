@@ -43,6 +43,8 @@ async function importMap(values) {
     const dataToSend = {
         title: values.title,
         url: values.url,
+        type: values.type,
+        action: values.action
     };
     return axiosApiInstancePublic.post(
       `${import.meta.env.REACT_APP_API_CALLS}scrape`,

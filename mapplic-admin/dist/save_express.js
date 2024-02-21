@@ -49,15 +49,8 @@ const upload = multer({
 
 app.post('/create-map', async (req, res) => {
     try {
-        let body = '';
-        req.on('data', chunk => {
-            body += chunk.toString();
-        });
-        await new Promise(resolve => req.on('end', resolve));
-        const parsedBody = JSON.parse(body);
+        const parsedBody = req.body; // Express ya ha analizado el cuerpo del JSON
         const { name } = parsedBody;
-        console.log('name===>');
-        console.log(name);
         const formattedName = name.replace(/ /g, '-').toLowerCase();
         const sourceFilePath = './templates/data-lots.json';
         const targetFilePath = `${formattedName}.json`;
@@ -126,13 +119,51 @@ app.post('/map-save', async (req, res) => {
       fs.writeFile(`${sanitizedFileName}`, JSON.stringify(parsed), (err) => { //, null, '\t'
         if (err) throw err;
         console.log(`Los cambios han sido guardados`);
-        res.end(`Los cambios han sido guardados`);
+        res.status(200).json({ message: 'Los cambios han sido guardados' });
       });
     });
 });
 
-
 app.post('/layer-image', upload.single('image'), async (req, res) => {
+  try {
+
+    if (!req.file) {
+      return res.status(401).send('Error: No se proporcionó ninguna imagen.');
+    }
+
+    if (req.file.width < 1000 || req.file.height < 1000) {
+      return res.status(409).send('Error: La imagen debe tener al menos 1000px de ancho y 1000px de alto.');
+    }
+
+    const targetDirectory = './assets/maps/';
+
+    const originalExtension = path.extname(req.file.originalname);
+
+    // Generar un nombre aleatorio de 16 caracteres
+    let randomName = crypto.randomBytes(8).toString('hex') + crypto.randomBytes(8).toString('hex');
+
+    const targetFileName = `${randomName}${originalExtension}`;
+
+    const targetFilePath = path.join(targetDirectory, targetFileName);
+
+    fs.writeFileSync(targetFilePath, req.file.buffer);
+
+    if (fs.existsSync(targetFilePath)) {
+      const imageResponse = targetFilePath.replace(/\\/g, '/');
+      res.status(200).json({ 
+        message: 'Imagen cargada correctamente y JSON actualizado!',
+        image: imageResponse
+      });
+    } else {
+      res.status(500).end('Error al cargar la imagen 01.');
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).end('Error al cargar la imagen 02.');
+  }
+});
+
+app.post('/layer-image___', upload.single('image'), async (req, res) => {
   try {
 
     const idLayer = req.body.layer_id;
@@ -274,91 +305,94 @@ function convertirObjetoAJSON(objeto, visto = new Set()) {
 
 
 app.post('/scrape', async (req, res) => {
+    try {
+        const parsedBody = req.body;
+        const { title, url, type, action } = parsedBody;
 
-  let body = '';
-  req.on('data', chunk => {
-      body += chunk.toString();
-  });
-  await new Promise(resolve => req.on('end', resolve));
-  const parsedBody = JSON.parse(body);
-  const { title, url } = parsedBody;
+        const formattedName = title.replace(/ /g, '-').toLowerCase();
+        const sourceFilePath = './templates/data-lots-emptylocations.json';
+        const targetFilePath = `${formattedName}.json`;
 
-
-  try {
-
-    const formattedName = title.replace(/ /g, '-').toLowerCase();
-    const sourceFilePath = './templates/data-lots-emptylocations.json';
-    const targetFilePath = `${formattedName}.json`;
-    if (fs.existsSync(targetFilePath)) {
-        res.status(409).end(`Ya existe un mapa con ese nombre.`);
-        return;
-    }
-    await copyFileAsync(sourceFilePath, targetFilePath);
-
-    const response = await axios.get(url);
-    // Cargar el contenido HTML en Cheerio
-    const $ = cheerio.load(response.data);
-    const data = $._root.children;
-    const newObj = []; 
-    var counter = 0;
-    const jsonContent = await fs.promises.readFile(targetFilePath, { encoding: 'utf-8' });
-    const parsedJson = JSON.parse(jsonContent);
-    for (const key in data) {
-        const point = data[counter];
-        const objetoConvertido = convertirObjetoAJSON(point);
-        var newElement = { 
-          id: objetoConvertido['id'],
-          title: 'Lote '+objetoConvertido['id'],
-          area: objetoConvertido['superficie'],
-          layer: 'lot-map',
-          action: 'tooltip',
-          type: 'circle',
-          disable: false,
-          desc: 'Manzana: '+objetoConvertido['manzana']+', lote: '+objetoConvertido['lote'],
-          ubicacion: objetoConvertido['ubicacion'],
-          superficie_frente: objetoConvertido['superficie_frente'],
-          ubicacion_ne: objetoConvertido['ubicacion_ne'],
-          ubicacion_se: objetoConvertido['ubicacion_se'],
-          ubicacion_so: objetoConvertido['ubicacion_so'],
-          ubicacion_no: objetoConvertido['ubicacion_no'],
-          manzana: objetoConvertido['manzana'],
-          lote: objetoConvertido['lote'],
-          fecha_entrega: objetoConvertido['fecha_entrega'],
-          precio_m2_contado: objetoConvertido['precio_m2_contado'],
-          precio_contado: objetoConvertido['precio_contado'],
-          precio_m2_6meses: objetoConvertido['precio_m2_6meses'],
-          precio_6meses: objetoConvertido['precio_6meses'],
-          precio_m2_12meses: objetoConvertido['precio_m2_12meses'],
-          precio_12meses: objetoConvertido['precio_12meses'],
-          precio_m2_18meses: objetoConvertido['precio_m2_18meses'],
-          precio_18meses: objetoConvertido['precio_18meses'],
-          precio_m2_24meses: objetoConvertido['precio_m2_24meses'],
-          precio_24meses: objetoConvertido['precio_24meses'],
-          precio_m2_36meses: objetoConvertido['precio_m2_36meses'],
-          precio_36meses: objetoConvertido['precio_36meses'],
-          estatus: objetoConvertido['estatus'],
-          activo: objetoConvertido['activo']
-        };
-        if (objetoConvertido['estatus']==0) {
-          newElement.style = 'reservado';
-          newElement.group = ["Reservado"];
-        }else if (objetoConvertido['estatus']==1) {
-          newElement.style = 'disponible';
-          newElement.group = ["Disponible"];
-        }else{
-          newElement.style = 'vendido';
-          newElement.group = ["Vendido"];
+        if (fs.existsSync(targetFilePath)) {
+            return res.status(409).end(`Ya existe un mapa con ese nombre.`);
         }
-      newObj.push(newElement);
-      counter++;
+
+        await copyFileAsync(sourceFilePath, targetFilePath);
+
+        const response = await axios.get(url);
+        const $ = cheerio.load(response.data);
+        const data = $._root.children;
+        const newObj = [];
+        let counter = 0;
+
+        const jsonContent = await readFileAsync(targetFilePath, { encoding: 'utf-8' });
+        const parsedJson = JSON.parse(jsonContent);
+
+        var x_ = .05;
+        var y_ = .1;
+        for (const key in data) {
+            if (y_ == 1) {
+              y_ = .05;
+              x_ = parseFloat((x_ + 0.05).toFixed(2)); 
+            }
+            const point = data[counter];
+            const objetoConvertido = convertirObjetoAJSON(point);
+            var newElement = {
+                id: objetoConvertido['id'],
+                title: 'Lote ' + objetoConvertido['id'],
+                area: objetoConvertido['superficie'],
+                layer: 'lot-map',
+                action: action,
+                type: type,
+                disable: false,
+                desc: 'Manzana: ' + objetoConvertido['manzana'] + ', lote: ' + objetoConvertido['lote'],
+                ubicacion: objetoConvertido['ubicacion'],
+                superficie_frente: objetoConvertido['superficie_frente'],
+                ubicacion_ne: objetoConvertido['ubicacion_ne'],
+                ubicacion_se: objetoConvertido['ubicacion_se'],
+                ubicacion_so: objetoConvertido['ubicacion_so'],
+                ubicacion_no: objetoConvertido['ubicacion_no'],
+                manzana: objetoConvertido['manzana'],
+                lote: objetoConvertido['lote'],
+                fecha_entrega: objetoConvertido['fecha_entrega'],
+                precio_m2_contado: objetoConvertido['precio_m2_contado'],
+                precio_contado: objetoConvertido['precio_contado'],
+                precio_m2_6meses: objetoConvertido['precio_m2_6meses'],
+                precio_6meses: objetoConvertido['precio_6meses'],
+                precio_m2_12meses: objetoConvertido['precio_m2_12meses'],
+                precio_12meses: objetoConvertido['precio_12meses'],
+                precio_m2_18meses: objetoConvertido['precio_m2_18meses'],
+                precio_18meses: objetoConvertido['precio_18meses'],
+                precio_m2_24meses: objetoConvertido['precio_m2_24meses'],
+                precio_24meses: objetoConvertido['precio_24meses'],
+                precio_m2_36meses: objetoConvertido['precio_m2_36meses'],
+                precio_36meses: objetoConvertido['precio_36meses'],
+                estatus: objetoConvertido['estatus'],
+                activo: objetoConvertido['activo'],
+                coord: [x_,y_]
+            };
+            console.log(x_+':'+y_);
+            y_ = parseFloat((y_ + 0.05).toFixed(2));
+            if (objetoConvertido['estatus'] == 0) {
+                newElement.style = 'reservado';
+                newElement.group = ["Reservado"];
+            } else if (objetoConvertido['estatus'] == 1) {
+                newElement.style = 'disponible';
+                newElement.group = ["Disponible"];
+            } else {
+                newElement.style = 'vendido';
+                newElement.group = ["Vendido"];
+            }
+            newObj.push(newElement);
+            counter++;
+        }
+        parsedJson.locations = parsedJson.locations.concat(newObj);
+        await writeFileAsync(targetFilePath, JSON.stringify(parsedJson, null, 2), 'utf-8');
+        res.status(200).json({ message: 'Mapa importado correctamente.' });
+    } catch (error) {
+        console.error('Error al hacer scraping:', error);
+        res.status(500).send('Error al hacer scraping');
     }
-    parsedJson.locations = parsedJson.locations.concat(newObj);
-    await fs.promises.writeFile(targetFilePath, JSON.stringify(parsedJson, null, 2), 'utf-8');
-    res.status(200).json({ message: 'Mapa importado correctamente.' });
-  } catch (error) {
-    console.error('Error al hacer scraping:', error);
-    res.status(500).send('Error al hacer scraping');
-  }
 });
 
 function formatFileName(fileName) {
@@ -375,7 +409,7 @@ function formatFileName(fileName) {
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
 
-  const usersFilePath = './users.json';
+  const usersFilePath = './data/users.json';
   let users = [];
   
   try {
@@ -393,9 +427,6 @@ app.post('/login', (req, res) => {
   
   // Encuentra al usuario en la base de datos
   const user = users.find((u) => u.username === username);
-
-  console.log('user==>');
-  console.log(user);
 
   if (!user || !bcrypt.compareSync(password, user.passwordHash)) {
     return res.status(401).json({ message: 'Credenciales inválidas' });
@@ -439,7 +470,7 @@ app.use((req, res) => {
 });
 
 const server = app.listen(port, () => {
-    console.log(`Server listening at port:${port}`);
+    console.log(`Server listening at http://localhost:${port}`);
 });
 
 // Graceful shutdown

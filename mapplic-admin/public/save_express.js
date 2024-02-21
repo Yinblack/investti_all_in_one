@@ -124,8 +124,46 @@ app.post('/map-save', async (req, res) => {
     });
 });
 
-
 app.post('/layer-image', upload.single('image'), async (req, res) => {
+  try {
+
+    if (!req.file) {
+      return res.status(401).send('Error: No se proporcionó ninguna imagen.');
+    }
+
+    if (req.file.width < 1000 || req.file.height < 1000) {
+      return res.status(409).send('Error: La imagen debe tener al menos 1000px de ancho y 1000px de alto.');
+    }
+
+    const targetDirectory = './assets/maps/';
+
+    const originalExtension = path.extname(req.file.originalname);
+
+    // Generar un nombre aleatorio de 16 caracteres
+    let randomName = crypto.randomBytes(8).toString('hex') + crypto.randomBytes(8).toString('hex');
+
+    const targetFileName = `${randomName}${originalExtension}`;
+
+    const targetFilePath = path.join(targetDirectory, targetFileName);
+
+    fs.writeFileSync(targetFilePath, req.file.buffer);
+
+    if (fs.existsSync(targetFilePath)) {
+      const imageResponse = targetFilePath.replace(/\\/g, '/');
+      res.status(200).json({ 
+        message: 'Imagen cargada correctamente y JSON actualizado!',
+        image: imageResponse
+      });
+    } else {
+      res.status(500).end('Error al cargar la imagen 01.');
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).end('Error al cargar la imagen 02.');
+  }
+});
+
+app.post('/layer-image___', upload.single('image'), async (req, res) => {
   try {
 
     const idLayer = req.body.layer_id;
@@ -304,8 +342,8 @@ app.post('/scrape', async (req, res) => {
                 title: 'Lote ' + objetoConvertido['id'],
                 area: objetoConvertido['superficie'],
                 layer: 'lot-map',
-                action: 'tooltip',
-                type: 'circle',
+                action: action,
+                type: type,
                 disable: false,
                 desc: 'Manzana: ' + objetoConvertido['manzana'] + ', lote: ' + objetoConvertido['lote'],
                 ubicacion: objetoConvertido['ubicacion'],
@@ -371,7 +409,7 @@ function formatFileName(fileName) {
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
 
-  const usersFilePath = './users.json';
+  const usersFilePath = './data/users.json';
   let users = [];
   
   try {

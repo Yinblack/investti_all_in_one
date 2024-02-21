@@ -184,7 +184,7 @@ export const MapsModal = ({open, setOpen, data}) => {
     			  	initialValues={{
     			  	  title: '',
     			  	  url: '',
-    			  	  type: '',
+    			  	  type: types.length > 0 ? types[0].value : '',
     			  	  action: ''
     			  	}}
           			validationSchema={Yup.object().shape({
@@ -196,11 +196,11 @@ export const MapsModal = ({open, setOpen, data}) => {
     			  	onSubmit={(values, { setSubmitting }) => {
             			publicServices.importMap(values)
             			  .then(response => {
-        					if (response.status===200) {
-        						setSubmitting(false);
-        						handleCloseModalImport();
-        						getMapas();
-        					}
+        							if (response.status===200) {
+        								setSubmitting(false);
+        								handleCloseModalImport();
+        								getMapas();
+        							}
             			  })
             			  .catch(function (error) {
             			  }).then(function () {
@@ -208,7 +208,7 @@ export const MapsModal = ({open, setOpen, data}) => {
             			  });
     			  	}}
     			>
-    			  {({ submitForm, isSubmitting }) => (
+    			  {({ submitForm, isSubmitting, errors ,handleBlur ,handleChange ,touched ,values }) => (
     			    <Form>
     			      <Field
     			        component={TextField}
@@ -231,9 +231,14 @@ export const MapsModal = ({open, setOpen, data}) => {
         				  name="type"
         				  select
         				  fullWidth 
-        				  label="Icono"
-        				  defaultValue="circle"
-        				  helperText="Icono para el punto en el mapa"
+        				  label="Icono de los puntos"
+                  error={Boolean(touched.type && errors.type)}
+                  fullWidth
+                  helperText={touched.type && errors.type}
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.type}
+                  style={{marginBottom: '20'}}
         				>
         				  {types.map((option) => (
         				    <MenuItem key={option.value} value={option.value}>
@@ -247,9 +252,13 @@ export const MapsModal = ({open, setOpen, data}) => {
         				  name="action"
         				  select
         				  fullWidth 
-        				  label="Acción al clic"
-        				  defaultValue="tooltip"
-        				  helperText="Acción al hacer clic en un punto"
+        				  label="Acción al hacer clic en un punto"
+                  error={Boolean(touched.action && errors.action)}
+                  fullWidth
+                  helperText={touched.action && errors.action}
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.action}
         				>
         				  {actions.map((option) => (
         				    <MenuItem key={option.value} value={option.value}>
