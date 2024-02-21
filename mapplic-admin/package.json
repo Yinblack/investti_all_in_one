@@ -6,7 +6,7 @@
   "description": "Map builder for mapplic",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --config vite.config.client.js",
     "build": "vite build",
     "lib": "vite build --config=vite.config.lib.js",
     "preview": "vite preview"
@@ -56,6 +56,7 @@
     "@types/react-dom": "^18.0.9",
     "@vitejs/plugin-react": "^3.0.0",
     "concurrently": "^8.2.2",
+    "dotenv": "^16.4.5",
     "eslint": "^8.49.0",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",

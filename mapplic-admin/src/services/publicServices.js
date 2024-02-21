@@ -15,7 +15,7 @@ const getToken = () => {
 
 async function login(values) {
     return axiosApiInstancePublic.post(
-        `http://143.110.228.33:3004/login`,
+        `${import.meta.env.REACT_APP_API_CALLS}login`,
         values
     ).then(response => {
         if (response.status === 201) {
@@ -31,7 +31,7 @@ async function addMap(name) {
         name: name,
     };
     return axiosApiInstancePublic.post(
-      `http://143.110.228.33:3004/create-map`,
+      `${import.meta.env.REACT_APP_API_CALLS}create-map`,
       dataToSend
     ).then(response => {
         return response;
@@ -45,7 +45,7 @@ async function importMap(values) {
         url: values.url,
     };
     return axiosApiInstancePublic.post(
-      `http://143.110.228.33:3004/scrape`,
+      `${import.meta.env.REACT_APP_API_CALLS}scrape`,
       dataToSend,
       {
         headers: {
@@ -61,7 +61,7 @@ async function importMap(values) {
 
 async function getMapas(name) {
     return axiosApiInstancePublicData.get(
-      `http://143.110.228.33:3004/get-maps`
+      `${import.meta.env.REACT_APP_API_CALLS}get-maps`
     ).then(response => {
         return response;
     }).catch(function (error) {
@@ -71,7 +71,7 @@ async function getMapas(name) {
 async function saveMap_(json) {
     const dataToSend = JSON.stringify(json);
     return axiosApiInstancePublic.post(
-      `http://143.110.228.33:3004/map-save`,
+      `${import.meta.env.REACT_APP_API_CALLS}map-save`,
       dataToSend
     ).then(response => {
         return response;
@@ -82,7 +82,7 @@ async function saveMap_(json) {
 
 function uploadCapaImage(object_data){
   return axiosApiInstanceFormData.post(
-      `http://143.110.228.33:3004/layer-image`,
+      `${import.meta.env.REACT_APP_API_CALLS}layer-image`,
       object_data
     )
     .then(response => {
@@ -94,7 +94,7 @@ function uploadCapaImage(object_data){
 
 function uploadLocationImage(object_data){
   return axiosApiInstanceFormData.post(
-      `http://143.110.228.33:3004/location-image`,
+      `${import.meta.env.REACT_APP_API_CALLS}location-image`,
       object_data
     )
     .then(response => {

@@ -18,12 +18,34 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { Button, LinearProgress } from '@mui/material';
 import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-mui';
+import TextFieldMaterial from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
 import * as Yup from 'yup';
 import { setLocale } from 'yup';
 
 import { publicServices } from './services/publicServices';
 
 export const MapsModal = ({open, setOpen, data}) => {
+
+	const types = [
+	    { value: 'hidden', label: 'Oculto' },
+	    { value: 'circle', label: 'Círculo' },
+	    { value: 'dot', label: 'Punto' },
+	    { value: 'square', label: 'Cuadrado' },
+	    { value: 'rounded', label: 'Redondeado' },
+	    { value: 'pin1', label: 'Pin 1' },
+	    { value: 'pin2', label: 'Pin 2' },
+	    { value: 'thumb', label: 'Miniatura' },
+	    { value: 'text', label: 'Texto' },
+	];
+
+	const actions = [
+	    { value: 'tooltip', label: 'Tooltip' },
+	    { value: 'none', label: 'Hacer nada' },
+	    { value: 'sidebar', label: 'PopUp lateral' },
+	    { value: 'link', label: 'Abrir enlace' }
+	];
+
 	const [preset, setPreset] = useState('world');
 	const [mapas, setMapas] = useState([]);
 	const [openModalNew, setOpenModalNew] = useState(false);
@@ -162,10 +184,14 @@ export const MapsModal = ({open, setOpen, data}) => {
     			  	initialValues={{
     			  	  title: '',
     			  	  url: '',
+    			  	  type: '',
+    			  	  action: ''
     			  	}}
           			validationSchema={Yup.object().shape({
           			  title: Yup.string().required(),
-          			  url: Yup.string().required()
+          			  url: Yup.string().required(),
+          			  type: Yup.string().required(),
+          			  action: Yup.string().required()
           			})}
     			  	onSubmit={(values, { setSubmitting }) => {
             			publicServices.importMap(values)
@@ -199,6 +225,38 @@ export const MapsModal = ({open, setOpen, data}) => {
     			        name="url"
     			        style={{ marginBottom: '20px', marginTop: '20px' }}
     			      />
+    			      <br />
+        				<TextFieldMaterial
+        				  id="type"
+        				  name="type"
+        				  select
+        				  fullWidth 
+        				  label="Icono"
+        				  defaultValue="circle"
+        				  helperText="Icono para el punto en el mapa"
+        				>
+        				  {types.map((option) => (
+        				    <MenuItem key={option.value} value={option.value}>
+        				      {option.label}
+        				    </MenuItem>
+        				  ))}
+        				</TextFieldMaterial>
+    			      <br />
+        				<TextFieldMaterial
+        				  id="action"
+        				  name="action"
+        				  select
+        				  fullWidth 
+        				  label="Acción al clic"
+        				  defaultValue="tooltip"
+        				  helperText="Acción al hacer clic en un punto"
+        				>
+        				  {actions.map((option) => (
+        				    <MenuItem key={option.value} value={option.value}>
+        				      {option.label}
+        				    </MenuItem>
+        				  ))}
+        				</TextFieldMaterial>
     			      <br />
     			      {isSubmitting && <LinearProgress />}
     			      <br />
@@ -288,7 +346,7 @@ const MapLink = ({id, map, file}) => {
 	
 	const createMap = async () => {
 		try {
-			await fetch('http://143.110.228.33:3000/mapplic-save', {
+			await fetch(`${import.meta.env.REACT_APP_API_CALLS}mapplic-save`, {
 				mode: 'no-cors',
 				method: 'POST',
 				headers: {
