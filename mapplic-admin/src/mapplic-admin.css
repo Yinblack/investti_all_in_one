@@ -59,7 +59,7 @@ div[id^=page-maps-]
 
 .mapplic-admin-content {
 	overflow-y: auto;
-	padding-left: 100px;
+	padding-left: 0px;
 }
 
 @media screen and (max-width: 1200px) {
@@ -152,7 +152,7 @@ div[id^=page-maps-]
 #map-container {
 	margin: 0 auto;
 	padding: 8px;
-	max-width: 1000px;
+	max-width: 100%;
 	transition: max-width 0.2s;
 	overflow-y: auto;
 }

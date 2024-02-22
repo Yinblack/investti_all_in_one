@@ -386,10 +386,10 @@ app.post('/scrape', async (req, res) => {
             newObj.push(newElement);
             counter++;
         }
-        var external_url = {
-            external_url: url
+        var import_url = {
+            import_url: url
         };
-        parsedJson.settings = parsedJson.settings.concat(external_url);
+        parsedJson.settings = { ...parsedJson.settings, ...import_url };
         parsedJson.locations = parsedJson.locations.concat(newObj);
         await writeFileAsync(targetFilePath, JSON.stringify(parsedJson, null, 2), 'utf-8');
         res.status(200).json({ message: 'Mapa importado correctamente.' });
