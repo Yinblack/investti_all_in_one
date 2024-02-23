@@ -106,6 +106,21 @@ function uploadLocationImage(object_data){
     });
 }
 
+function syncMap(fileName){
+    const dataToSend = {
+        fileName: fileName,
+    };
+    return axiosApiInstancePublic.post(
+        `${import.meta.env.REACT_APP_API_CALLS}sync-map`,
+        dataToSend
+    )
+    .then(response => {
+        return response;
+    })
+    .catch(function (error) {
+    });
+}
+
 export const publicServices = {
   login,
   addMap,
@@ -115,5 +130,6 @@ export const publicServices = {
   getToken,
   uploadCapaImage,
   uploadLocationImage,
-  importMap
+  importMap,
+  syncMap
 };

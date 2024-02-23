@@ -16,7 +16,7 @@ export const Directory = forwardRef(({setOpened, updateSetting, updateList}, ref
 	const singleGroup = (group, updateProperty) => (
 		<div className="option-group">
 			<Manual
-				label="Name"
+				label="Nombre"
 				value={group.name}
 				onChange={val => updateProperty('name', val)}
 				validate={val => unique(val, data.groups, 'name') && filled(val)}
@@ -24,7 +24,7 @@ export const Directory = forwardRef(({setOpened, updateSetting, updateList}, ref
 				autoFocus
 			/>
 			<Color label="Color" value={group.color} onChange={val => updateProperty('color', val)} />
-			<Switch label="Hide" value={group.hide || false} onChange={val => updateProperty('hide', val)} />
+			<Switch label="Oculto" value={group.hide || false} onChange={val => updateProperty('hide', val)} />
 		</div>
 	)
 
@@ -38,8 +38,8 @@ export const Directory = forwardRef(({setOpened, updateSetting, updateList}, ref
 				icon={<Key size={16} />}
 				autoFocus
 			/>
-			<Input label="Name" value={filter.name} onChange={val => updateProperty('name', val)} />
-			<Dropdown label="Type" value={filter.type} values={{checkbox: 'Checkbox', tags: 'Groups', dropdown: 'Dropdown'}} onChange={val => updateProperty('type', val)} />
+			<Input label="Nombre" value={filter.name} onChange={val => updateProperty('name', val)} />
+			<Dropdown label="Tipo" value={filter.type} values={{checkbox: 'Checkbox', tags: 'Grupos', dropdown: 'Dropdown'}} onChange={val => updateProperty('type', val)} />
 			
 			<Conditional active={filter.type === 'tags'}>
 				<Dropdown label="Default" value={filter.default || []} multiple values={getGroups(data?.groups)} onChange={val => updateProperty('default', val)} />
@@ -56,7 +56,7 @@ export const Directory = forwardRef(({setOpened, updateSetting, updateList}, ref
 				<Input label="Value" value={filter.value} onChange={val => updateProperty('value', val)} />
 			</Conditional>
 
-			<Switch label="Disable" value={filter.disable || false} onChange={val => updateProperty('disable', val)} />
+			<Switch label="Deshabilitar" value={filter.disable || false} onChange={val => updateProperty('disable', val)} />
 		</div>
 	)
 
@@ -65,25 +65,25 @@ export const Directory = forwardRef(({setOpened, updateSetting, updateList}, ref
 			<div className="panel-content">
 				<div className="panel-inner">
 					<div className="mapplic-panel-group">
-						<TitleToggle title="Directory" checked={data.settings.sidebar} onChange={checked => updateSetting('sidebar', checked)} back={() => setOpened(false)} />
+						<TitleToggle title="Directorio" checked={data.settings.sidebar} onChange={checked => updateSetting('sidebar', checked)} back={() => setOpened(false)} />
 						<Conditional active={data.settings.sidebar || false}>
 							<div className="mapplic-panel-options">
-								<Switch label="Order by title" value={data.settings.ordered || false} onChange={checked => updateSetting('ordered', checked)} />
-								<Switch label="Group by" value={data.settings.groupBy || false} onChange={checked => updateSetting('groupBy', checked)} />
-								<Switch label="Thumbnails" value={data.settings.thumbnails || false} onChange={checked => updateSetting('thumbnails', checked)} />
-								<Switch label="Toggle" value={data.settings.toggleSidebar || false} onChange={checked => updateSetting('toggleSidebar', checked)} />
-								<Switch label="By default" active={data.settings.toggleSidebar || false} value={data.settings.sidebarClosed} values={{false: 'Opened', true: 'Closed'}} onChange={checked => updateSetting('sidebarClosed', checked)} />
-								<Switch label="Sidebar" value={data.settings.rightSidebar || false} values={{false: 'Left', true: 'Right'}} onChange={checked => updateSetting('rightSidebar', checked)} />
+								<Switch label="Ordenar por título" value={data.settings.ordered || false} onChange={checked => updateSetting('ordered', checked)} />
+								<Switch label="Agrupar" value={data.settings.groupBy || false} onChange={checked => updateSetting('groupBy', checked)} />
+								<Switch label="Miniaturas" value={data.settings.thumbnails || false} onChange={checked => updateSetting('thumbnails', checked)} />
+								<Switch label="Acordeon" value={data.settings.toggleSidebar || false} onChange={checked => updateSetting('toggleSidebar', checked)} />
+								<Switch label="Por defecto" active={data.settings.toggleSidebar || false} value={data.settings.sidebarClosed} values={{false: 'Abierto', true: 'Cerrado'}} onChange={checked => updateSetting('sidebarClosed', checked)} />
+								<Switch label="Sidebar" value={data.settings.rightSidebar || false} values={{false: 'Izquierda', true: 'Derecha'}} onChange={checked => updateSetting('rightSidebar', checked)} />
 							</div>
 						</Conditional>
 					</div>
 
 					<div className="mapplic-panel-group">
-						<TitleToggle title="Search and filters" checked={data.settings.filters} onChange={checked => updateSetting('filters', checked)} />
+						<TitleToggle title="Busqueda y filtros" checked={data.settings.filters} onChange={checked => updateSetting('filters', checked)} />
 						<Conditional active={data.settings.filters || false}>
 							<div className="mapplic-panel-options">
-								<Switch label="Visibility" active={data.settings.filters} value={data.settings.filtersAlwaysVisible || false} values={{false: 'Toggle', true: 'Always'}} onChange={checked => updateSetting('filtersAlwaysVisible', checked)} />
-								<Switch label="By default" active={data.settings.filters} value={data.settings.filtersOpened || false} values={{true: 'Opened', false: 'Closed'}} onChange={checked => updateSetting('filtersOpened', checked)} />
+								<Switch label="Visibilidad" active={data.settings.filters} value={data.settings.filtersAlwaysVisible || false} values={{false: 'Acordeon', true: 'Siempre'}} onChange={checked => updateSetting('filtersAlwaysVisible', checked)} />
+								<Switch label="Por defecto" active={data.settings.filters} value={data.settings.filtersOpened || false} values={{true: 'Abierto', false: 'Cerrado'}} onChange={checked => updateSetting('filtersOpened', checked)} />
 							</div>
 						</Conditional>
 					</div>
@@ -92,7 +92,7 @@ export const Directory = forwardRef(({setOpened, updateSetting, updateList}, ref
 						<AdminItems
 							selected={group}
 							setSelected={setGroup}
-							label="Groups"
+							label="Grupos"
 							list={data.groups}
 							setList={val => updateList('groups', val)}
 							newItem={{name: 'Group ' + Date.now(), color: '#111827'}}
@@ -101,14 +101,14 @@ export const Directory = forwardRef(({setOpened, updateSetting, updateList}, ref
 							renderItem={(group, updateProperty) => (
 								<div className="option-group">
 									<Manual
-										label="Name"
+										label="Nombre"
 										value={group.name}
 										onChange={val => updateProperty('name', val)}
 										validate={val => unique(val, data.groups, 'name') && filled(val)}
 										icon={<Key size={16} />}
 									/>
 									<Color label="Color" value={group.color} onChange={val => updateProperty('color', val)} />
-									<Switch label="Hide" value={group.hide || false} onChange={val => updateProperty('hide', val)} />
+									<Switch label="Oculto" value={group.hide || false} onChange={val => updateProperty('hide', val)} />
 								</div>
 							)}
 						/>
@@ -118,7 +118,7 @@ export const Directory = forwardRef(({setOpened, updateSetting, updateList}, ref
 						<AdminItems
 							selected={filter}
 							setSelected={setFilter}
-							label="Custom filters"
+							label="Filtros personalizados"
 							list={data.filters}
 							setList={val => updateList('filters', val)}
 							newItem={{id: 'f' + Date.now(), name: 'New filter', type: 'checkbox'}}

@@ -84,7 +84,7 @@ export const ControlPanel = ({updateHistory, action, title, state, saveMap, setJ
 						{ opened === 'Capas' && <Layers key="Capas" setOpened={setOpened} updateSetting={updateSetting} updateList={updateList} updateHistory={updateHistory} setJsonR={setJsonR} /> }
 						{ opened === 'Ubicaciones' && <Locations key="Ubicaciones" setOpened={setOpened} updateSetting={updateSetting} updateList={updateList} setJsonR={setJsonR} /> }
 						{ opened === 'Modulos' && <Directory Key="Modulos" setOpened={setOpened} updateSetting={updateSetting} updateList={updateList} /> }
-						{ opened === 'Configuración' && <Settings key="Configuración" setOpened={setOpened} updateSetting={updateSetting} updateList={updateList} /> }
+						{ opened === 'Configuración' && <Settings key="Configuración" setOpened={setOpened} updateSetting={updateSetting} updateList={updateList} setJsonR={setJsonR} /> }
 						{ opened === 'Apariencia' && <Appearance key="Apariencia" setOpened={setOpened} updateSetting={updateSetting} updateList={updateList} /> }
 						{ opened === 'Wayfinding' && <Wayfinding key="Wayfinding" setOpened={setOpened} updateSetting={updateSetting} updateList={updateList} /> }
 					</AnimatePresence>

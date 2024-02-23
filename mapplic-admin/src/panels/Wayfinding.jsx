@@ -19,17 +19,17 @@ export const Wayfinding = forwardRef(({setOpened, updateSetting, updateList}, re
 	const singlePath = (path, updateProperty) => (
 		<div className="option-group">
 			<Manual
-				label="Id"
+				label="ID"
 				value={path.id}
 				onChange={val => updateProperty('id', val)}
 				validate={val => unique(val, data?.routes, 'id') && filled(val) && validClass(val)}
 				icon={<Key size={16} />}
 				autoFocus
 			/>
-			<Switch label="Connect" value={path.connect || false} values={{true: 'Layer', false: 'Location'}} onChange={val => updateProperty('connect', val)} />
+			<Switch label="Conectar" value={path.connect || false} values={{true: 'Capa', false: 'Ubicación'}} onChange={val => updateProperty('connect', val)} />
 			<Input label="Endpoint" value={path.endpoint} placeholder="None" onChange={val => updateProperty('endpoint', val)} />
-			<Input label="Weight" type="number" min="0" step="0.1" value={path.weight} suffix="X" placeholder="1" onChange={val => updateProperty('weight', val)} />
-			<Switch label="Type" value={path.element || false} values={{polyline: 'Line', polygon: 'Shape'}} onChange={val => updateProperty('element', val)} />
+			<Input label="Peso" type="number" min="0" step="0.1" value={path.weight} suffix="X" placeholder="1" onChange={val => updateProperty('weight', val)} />
+			<Switch label="Tipo" value={path.element || false} values={{polyline: 'Linea', polygon: 'Forma'}} onChange={val => updateProperty('element', val)} />
 			<Switch label="Inaccessible" value={path.inaccessible || false} onChange={val => updateProperty('inaccessible', val)} />
 		</div>
 	)
@@ -41,13 +41,13 @@ export const Wayfinding = forwardRef(({setOpened, updateSetting, updateList}, re
 				<div className="panel-inner">
 
 					<div className="mapplic-panel-group">
-						<TitleToggle title="Wayfinding" checked={data.settings.wayfinding} onChange={checked => updateSetting('wayfinding', checked)} back={() => setOpened(false)} />
+						<TitleToggle title="Orientación" checked={data.settings.wayfinding} onChange={checked => updateSetting('wayfinding', checked)} back={() => setOpened(false)} />
 						<Conditional active={data.settings.wayfinding || false}>
 							<div className="mapplic-panel-options">
-								<Switch label="Controls" value={data.settings.wayfindingControls} values={controlZones} onChange={val => updateSetting('wayfindingControls', val)} nullValue="" />
-								<Switch label="By default" active={data.settings.wayfinding || false} value={data.settings.wayfindingOpened || false} values={{false: 'Closed', true: 'Opened'}} onChange={checked => updateSetting('wayfindingOpened', checked)} />
+								<Switch label="Ubicación icono" value={data.settings.wayfindingControls} values={controlZones} onChange={val => updateSetting('wayfindingControls', val)} nullValue="" />
+								<Switch label="Por defecto" active={data.settings.wayfinding || false} value={data.settings.wayfindingOpened || false} values={{false: 'Closed', true: 'Opened'}} onChange={checked => updateSetting('wayfindingOpened', checked)} />
 								<Input
-									label="Line width"
+									label="Anchira de linea"
 									type="number"
 									min="0"
 									step="0.1"
@@ -57,14 +57,14 @@ export const Wayfinding = forwardRef(({setOpened, updateSetting, updateList}, re
 									suffix="PT"
 								/>
 								<Color
-									label="Line color"
+									label="Color de linea"
 									value={data.settings.wayfindingLineColor}
 									onChange={color => updateSetting('wayfindingLineColor', color)}
 									placeholder="Default"
 									alpha={false}
 								/>
 								<Input
-									label="Speed"
+									label="Velocidad"
 									type="number"
 									min="0"
 									placeholder="2"
@@ -73,7 +73,7 @@ export const Wayfinding = forwardRef(({setOpened, updateSetting, updateList}, re
 									suffix="SEC"
 								/>
 								<Input
-									label="Smoothing"
+									label="Suavizado"
 									type="number"
 									min="0"
 									placeholder="Disabled"
@@ -81,13 +81,13 @@ export const Wayfinding = forwardRef(({setOpened, updateSetting, updateList}, re
 									onChange={val => updateSetting('wayfindingSmoothing', parseFloat(val))}
 								/>
 								<Input
-									label="Fixed from"
+									label="Flotante de"
 									placeholder="None"
 									value={data.settings.wayfindingFixedFrom}
 									onChange={val => updateSetting('wayfindingFixedFrom', val)}
 									icon={<Key size={16} />}
 								/>
-								<Switch label="Accessibility" value={data.settings.wayfindingAccessibility || false} values={{true: 'On', false: 'Off'}} onChange={checked => updateSetting('wayfindingAccessibility', checked)} />
+								<Switch label="Accessibilidad" value={data.settings.wayfindingAccessibility || false} values={{true: 'On', false: 'Off'}} onChange={checked => updateSetting('wayfindingAccessibility', checked)} />
 							</div>
 							<AutoLinker />
 						</Conditional>
@@ -97,7 +97,7 @@ export const Wayfinding = forwardRef(({setOpened, updateSetting, updateList}, re
 						<AdminItems
 							selected={path}
 							setSelected={setPath}
-							label={`Paths`}
+							label={`Rutas`}
 							list={data?.routes}
 							setList={val => updateList('routes', val)}
 							newItem={{id: 'path' + Date.now()}}
@@ -147,6 +147,6 @@ const AutoLinker = () => {
 	}
 
 	return (
-		<button className="mapplic-button alt" onClick={handleClick}>Run autolink</button>
+		<button className="mapplic-button alt" onClick={handleClick}>Ejecutar enlace automático</button>
 	)
 }

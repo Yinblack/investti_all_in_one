@@ -96,9 +96,8 @@ export const Layers = forwardRef(({setOpened, updateSetting, updateList}, ref) =
 				validate={val => unique(val, data.layers, 'id') && filled(val)}
 				icon={<Key size={16} />}
 			/>
-			<Input label="Name" value={layer.name} onChange={val => updateProperty('name', val)} autoFocus />
-			<Upload label="File" value={layer.file} onChange={val => updateProperty('file', val)} placeholder="Map URL" button={true} />
-
+			<Input label="Nombre" value={layer.name} onChange={val => updateProperty('name', val)} autoFocus />
+			<Upload label="URL Imagen" disabled value={layer.file} onChange={val => updateProperty('file', val)} placeholder="Map URL" button={true} />
     	<Button component="label" variant="contained" startIcon={<ImageIcon />}>
     	  Cargar imagén
     	  <VisuallyHiddenInput type="file" onChange={handleFileChange} id="fileInput"/>

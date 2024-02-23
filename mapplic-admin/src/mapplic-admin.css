@@ -157,6 +157,10 @@ div[id^=page-maps-]
 	overflow-y: auto;
 }
 
+.inIframe #map-container {
+	max-width: 1000px;
+}
+
 #map-container.tablet {
 	max-width: 720px;
 }

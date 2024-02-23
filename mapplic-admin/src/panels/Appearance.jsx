@@ -27,20 +27,20 @@ export const Appearance = forwardRef(({setOpened, updateSetting, updateList}, re
 					icon={<Key size={16} />}
 					autoFocus
 				/>
-				<Color label="Fill" value={style['base-color']} onChange={val => updateProperty('base-color', val)} placeholder="Inherit" />
-				<Color label="Stroke" value={style['base-stroke']} onChange={val => updateProperty('base-stroke', val)} placeholder="Inherit" />
-				<Input label="Stroke width" type="number" min="0" value={style['stroke-width']} onChange={val => updateProperty('stroke-width', parseFloat(val))} placeholder="Inherit" />
-				<Color label="Text color" value={style['text-color']} onChange={val => updateProperty('text-color', val)} placeholder="Default" />
-				<Switch label="Marker" value={style.marker} onChange={val => updateProperty('marker', val)} />
+				<Color label="Relleno" value={style['base-color']} onChange={val => updateProperty('base-color', val)} placeholder="Inherit" />
+				<Color label="Borde" value={style['base-stroke']} onChange={val => updateProperty('base-stroke', val)} placeholder="Inherit" />
+				<Input label="Anchura de borde" type="number" min="0" value={style['stroke-width']} onChange={val => updateProperty('stroke-width', parseFloat(val))} placeholder="Inherit" />
+				<Color label="Color de texto" value={style['text-color']} onChange={val => updateProperty('text-color', val)} placeholder="Default" />
+				<Switch label="Marcador" value={style.marker} onChange={val => updateProperty('marker', val)} />
 				<Switch label="SVG" value={style.svg} onChange={val => updateProperty('svg', val)} />
 			</Tab>
 			<Tab active={styleTab === 'hover'} className="option-group">
-				<Color label="Fill" value={style['hover-color']} onChange={val => updateProperty('hover-color', val)} placeholder="Inherit" />
-				<Color label="Stroke" value={style['hover-stroke']} onChange={val => updateProperty('hover-stroke', val)} placeholder="Inherit" />
+				<Color label="Relleno" value={style['hover-color']} onChange={val => updateProperty('hover-color', val)} placeholder="Inherit" />
+				<Color label="Borde" value={style['hover-stroke']} onChange={val => updateProperty('hover-stroke', val)} placeholder="Inherit" />
 			</Tab>
 			<Tab active={styleTab === 'active'} className="option-group">
-				<Color label="Fill" value={style['active-color']} onChange={val => updateProperty('active-color', val)} placeholder="Inherit" />
-				<Color label="Stroke" value={style['active-stroke']} onChange={val => updateProperty('active-stroke', val)} placeholder="Inherit" />
+				<Color label="Relleno" value={style['active-color']} onChange={val => updateProperty('active-color', val)} placeholder="Inherit" />
+				<Color label="Borde" value={style['active-stroke']} onChange={val => updateProperty('active-stroke', val)} placeholder="Inherit" />
 			</Tab>
 		</>
 	)
@@ -52,13 +52,13 @@ export const Appearance = forwardRef(({setOpened, updateSetting, updateList}, re
 					<div className="mapplic-panel-group">
 						<div style={{display: 'flex', alignItems: 'center', gap: 4, marginLeft: -8, marginTop: -8}}>
 							<button className="mapplic-admin-button" onClick={() => setOpened(false)}><ArrowLeft size={16} /></button>
-							<h4>Appearance</h4>
+							<h4>Apariencia</h4>
 						</div>
 						<Color label="Primary color" value={data.settings.primaryColor} alpha={false} onChange={color => updateSetting('primaryColor', color)} placeholder="Default" />
 						<label className="field-label above">
-							<span>Custom CSS</span>
+							<span>CSS Personalizado</span>
 							<div className="field" style={{backgroundColor: '#fff'}}>
-								<Suspense fallback={<p>loading</p>}>
+								<Suspense fallback={<p>cargando</p>}>
 									<CodeEditor
 										value={data.settings.css}
 										mode="css"
@@ -77,7 +77,7 @@ export const Appearance = forwardRef(({setOpened, updateSetting, updateList}, re
 						<AdminItems
 							selected={style}
 							setSelected={setStyle}
-							label="Location styles"
+							label="Estilo por estatus"
 							list={data.styles}
 							setList={val => updateList('styles', val)}
 							newItem={{class: 'class' + Date.now(), svg: true, marker: true}}

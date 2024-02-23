@@ -54,7 +54,7 @@ const App = () => {
 	  return (
 	    <MapplicStore>
 	      <Suspense fallback={<div>Loading...</div>}>
-	        <MapplicElement json={jsonMap} />
+	        <MapplicElement json={jsonMap} className="inIframe"/>
 	      </Suspense>
 	    </MapplicStore>
 	  );

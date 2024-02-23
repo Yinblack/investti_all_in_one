@@ -118,7 +118,6 @@ app.post('/map-save', async (req, res) => {
 
       fs.writeFile(`${sanitizedFileName}`, JSON.stringify(parsed), (err) => { //, null, '\t'
         if (err) throw err;
-        console.log(`Los cambios han sido guardados`);
         res.status(200).json({ message: 'Los cambios han sido guardados' });
       });
     });
@@ -303,6 +302,145 @@ function convertirObjetoAJSON(objeto, visto = new Set()) {
   return resultado;
 }
 
+app.post('/sync-map', async (req, res) => {
+    try {
+        const parsedBody = req.body;
+        const { fileName } = parsedBody;
+        const targetFilePath = './'+fileName;
+
+        if (!fs.existsSync(targetFilePath)) {
+            return res.status(409).end(`No existe un mapa con ese nombre.`);
+        }
+
+        const jsonContent = await readFileAsync(targetFilePath, { encoding: 'utf-8' });
+        const parsedJson = JSON.parse(jsonContent);
+        const url = parsedJson.settings.import_url;
+
+        const locations_json = parsedJson.locations;
+
+        const response = await axios.get(url);
+        const $ = cheerio.load(response.data);
+        const data = $._root.children;
+
+        const objects = [];
+
+        var exist = false;
+        var x_ = .05;
+        var y_ = .1;
+        var last_action = '';
+        var last_type = '';
+        let counter = 0;
+        for (const key in data) {
+            const point = data[counter];
+            const objetoConvertido = convertirObjetoAJSON(point);
+            exist = false;
+            locations_json.forEach(function(location) {
+                last_action = location.action;
+                last_type = location.type;
+                if (location.id===objetoConvertido['id']) {
+                    exist = true;
+                    location.area = objetoConvertido['superficie'];
+                    location.ubicacion = objetoConvertido['ubicacion'];
+                    location.superficie_frente = objetoConvertido['superficie_frente'];
+                    location.ubicacion_ne = objetoConvertido['ubicacion_ne'];
+                    location.ubicacion_se = objetoConvertido['ubicacion_se'];
+                    location.ubicacion_so = objetoConvertido['ubicacion_so'];
+                    location.ubicacion_no = objetoConvertido['ubicacion_no'];
+                    location.manzana = objetoConvertido['manzana'];
+                    location.lote = objetoConvertido['lote'];
+                    location.fecha_entrega = objetoConvertido['fecha_entrega'];
+                    location.precio_m2_contado = objetoConvertido['precio_m2_contado'];
+                    location.precio_contado = objetoConvertido['precio_contado'];
+                    location.precio_m2_6meses = objetoConvertido['precio_m2_6meses'];
+                    location.precio_6meses = objetoConvertido['precio_6meses'];
+                    location.precio_m2_12meses = objetoConvertido['precio_m2_12meses'];
+                    location.precio_12meses = objetoConvertido['precio_12meses'];
+                    location.precio_m2_18meses = objetoConvertido['precio_m2_18meses'];
+                    location.precio_18meses = objetoConvertido['precio_18meses'];
+                    location.precio_m2_24meses = objetoConvertido['precio_m2_24meses'];
+                    location.precio_24meses = objetoConvertido['precio_24meses'];
+                    location.precio_m2_36meses = objetoConvertido['precio_m2_36meses'];
+                    location.precio_36meses = objetoConvertido['precio_36meses'];
+                    location.estatus = objetoConvertido['estatus'];
+                    location.activo = objetoConvertido['activo'];
+                    if (objetoConvertido['estatus'] == 0) {
+                        location.style = 'reservado';
+                        location.group = ["Reservado"];
+                    } else if (objetoConvertido['estatus'] == 1) {
+                        location.style = 'disponible';
+                        location.group = ["Disponible"];
+                    } else {
+                        location.style = 'vendido';
+                        location.group = ["Vendido"];
+                    }
+                    objects.push(location);
+                } 
+            });
+            if (!exist) {
+                console.log('NO EXISTE CON EL ID: '+objetoConvertido['id']);
+                if (y_ == 1) {
+                  y_ = .05;
+                  x_ = parseFloat((x_ + 0.05).toFixed(2)); 
+                }
+                var newElement = {
+                    id: objetoConvertido['id'],
+                    title: 'Lote ' + objetoConvertido['id'],
+                    area: objetoConvertido['superficie'],
+                    layer: 'lot-map',
+                    action: last_action,
+                    type: last_type,
+                    disable: false,
+                    desc: 'Manzana: ' + objetoConvertido['manzana'] + ', lote: ' + objetoConvertido['lote'],
+                    ubicacion: objetoConvertido['ubicacion'],
+                    superficie_frente: objetoConvertido['superficie_frente'],
+                    ubicacion_ne: objetoConvertido['ubicacion_ne'],
+                    ubicacion_se: objetoConvertido['ubicacion_se'],
+                    ubicacion_so: objetoConvertido['ubicacion_so'],
+                    ubicacion_no: objetoConvertido['ubicacion_no'],
+                    manzana: objetoConvertido['manzana'],
+                    lote: objetoConvertido['lote'],
+                    fecha_entrega: objetoConvertido['fecha_entrega'],
+                    precio_m2_contado: objetoConvertido['precio_m2_contado'],
+                    precio_contado: objetoConvertido['precio_contado'],
+                    precio_m2_6meses: objetoConvertido['precio_m2_6meses'],
+                    precio_6meses: objetoConvertido['precio_6meses'],
+                    precio_m2_12meses: objetoConvertido['precio_m2_12meses'],
+                    precio_12meses: objetoConvertido['precio_12meses'],
+                    precio_m2_18meses: objetoConvertido['precio_m2_18meses'],
+                    precio_18meses: objetoConvertido['precio_18meses'],
+                    precio_m2_24meses: objetoConvertido['precio_m2_24meses'],
+                    precio_24meses: objetoConvertido['precio_24meses'],
+                    precio_m2_36meses: objetoConvertido['precio_m2_36meses'],
+                    precio_36meses: objetoConvertido['precio_36meses'],
+                    estatus: objetoConvertido['estatus'],
+                    activo: objetoConvertido['activo'],
+                    coord: [x_,y_]
+                };
+                y_ = parseFloat((y_ + 0.05).toFixed(2));
+                if (objetoConvertido['estatus'] == 0) {
+                    newElement.style = 'reservado';
+                    newElement.group = ["Reservado"];
+                } else if (objetoConvertido['estatus'] == 1) {
+                    newElement.style = 'disponible';
+                    newElement.group = ["Disponible"];
+                } else {
+                    newElement.style = 'vendido';
+                    newElement.group = ["Vendido"];
+                }
+                objects.push(newElement);
+            }
+            counter++;
+        }
+        parsedJson.locations = objects;
+        await writeFileAsync(targetFilePath, JSON.stringify(parsedJson, null, 2), 'utf-8');
+        var json = parsedJson;
+        res.status(200).json({ message: 'Mapa sincronizado correctamente.', json });
+    } catch (error) {
+        console.error('Error al sincronizar:', error);
+        res.status(500).send('Error al sincronizar');
+    }
+});
+
 
 app.post('/scrape', async (req, res) => {
     try {
@@ -371,7 +509,6 @@ app.post('/scrape', async (req, res) => {
                 activo: objetoConvertido['activo'],
                 coord: [x_,y_]
             };
-            console.log(x_+':'+y_);
             y_ = parseFloat((y_ + 0.05).toFixed(2));
             if (objetoConvertido['estatus'] == 0) {
                 newElement.style = 'reservado';
