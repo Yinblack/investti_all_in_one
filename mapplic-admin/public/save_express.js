@@ -1,4 +1,5 @@
 import fs from 'fs';
+import https from 'https';
 import path from 'path';
 import express from 'express';
 import cors from 'cors';
@@ -13,7 +14,6 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
 const app = express();
-const port = 3004;
 
 app.use(bodyParser.json());
 
@@ -610,15 +610,15 @@ app.use((req, res) => {
     res.status(404).end();
 });
 
-const server = app.listen(port, () => {
-    console.log(`Server NextJS listening at port:${port}`);
-});
+const options = {
+    key: fs.readFileSync('/etc/letsencrypt/live/mapplic.bloque9.us/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/mapplic.bloque9.us/fullchain.pem')
+};
 
-// Graceful shutdown
-process.on('SIGINT', () => {
-    console.log('Shutting down gracefully...');
-    server.close(() => {
-        console.log('Server closed.');
-        process.exit(0);
-    });
+const server = https.createServer(options, app);
+
+const port = 443;
+
+server.listen(port, () => {
+    console.log(`Servidor Express con SSL escuchando en el puerto ${port}`);
 });
