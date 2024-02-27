@@ -605,10 +605,14 @@ function authenticateToken(req, res, next) {
   });
 }
 
-
-app.use((req, res) => {
-    res.status(404).end();
+app.use((req, res, next) => {
+    if (req.headers['x-forwarded-proto'] !== 'https') {
+        res.redirect(`https://${req.headers.host}${req.url}`);
+    } else {
+        next();
+    }
 });
+
 
 const options = {
     key: fs.readFileSync('/etc/letsencrypt/live/mapplic.bloque9.us/privkey.pem'),
