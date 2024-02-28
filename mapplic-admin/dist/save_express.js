@@ -97,6 +97,8 @@ app.get('/get-maps', async (req, res) => {
 
 
 app.post('/map-save', async (req, res) => {
+    res.setHeader('Cache-Control', 'no-store');
+
     let body = '';
     req.on('data', chunk => {
       body += chunk.toString(); // convert Buffer to string
