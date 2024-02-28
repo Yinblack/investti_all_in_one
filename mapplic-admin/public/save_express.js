@@ -17,7 +17,11 @@ const app = express();
 
 app.use(bodyParser.json());
 
-app.use(cors());
+const corsOptions = {
+  origin: 'https://mapplic.bloque9.us:443',
+  optionsSuccessStatus: 200 // algunas versiones de CORS de Express requieren esto
+};
+app.use(cors(corsOptions));
 
 const copyFileAsync = promisify(fs.copyFile);
 const readdirAsync = promisify(fs.readdir);
