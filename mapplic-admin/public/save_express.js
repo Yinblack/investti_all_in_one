@@ -34,6 +34,12 @@ app.use((req, res, next) => {
   next();
 });
 
+// Middleware para configurar Content Security Policy (CSP)
+app.use((req, res, next) => {
+  res.setHeader('Content-Security-Policy', "frame-ancestors 'self' https://mapplic.bloque9.com");
+  next();
+});
+
 const copyFileAsync = promisify(fs.copyFile);
 const readdirAsync = promisify(fs.readdir);
 const readFileAsync = promisify(fs.readFile);
