@@ -25,6 +25,15 @@ app.use(bodyParser.json());
 
 app.use(cors({ origin: '*' }));
 
+// Middleware para agregar encabezados de no caché a todas las respuestas
+app.use((req, res, next) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  res.setHeader('Surrogate-Control', 'no-store');
+  next();
+});
+
 const copyFileAsync = promisify(fs.copyFile);
 const readdirAsync = promisify(fs.readdir);
 const readFileAsync = promisify(fs.readFile);
@@ -97,8 +106,6 @@ app.get('/get-maps', async (req, res) => {
 
 
 app.post('/map-save', async (req, res) => {
-    res.setHeader('Cache-Control', 'no-store');
-
     let body = '';
     req.on('data', chunk => {
       body += chunk.toString(); // convert Buffer to string
