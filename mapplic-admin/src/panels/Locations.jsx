@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { lazy, Suspense, useState, forwardRef } from 'react'
 import { Panel } from '../Panel'
 import { AnimatePresence } from 'framer-motion'
@@ -16,6 +17,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Dialog from '@mui/material/Dialog';
+import SwitchMaterial from '@mui/material/Switch';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 import { publicServices } from '../services/publicServices';
 
@@ -96,6 +99,7 @@ export const Locations = forwardRef(({setOpened, updateSetting, updateList, setJ
 
 	const [location, setLocation] = useState(false);
 	const [locationTab, setLocationTab] = useState('content');
+  const [checked, setChecked] = React.useState(false);
 
 	if (!data.locations) return null;
 
@@ -148,7 +152,25 @@ export const Locations = forwardRef(({setOpened, updateSetting, updateList, setJ
 
 	const customAttributes = () => getAllKeys().filter(key => !attributes.includes(key));
 
-	const singleLocation = (location, updateProperty, sampled) => (
+  const handleChange = (event, updateProperty) => {
+    if (event.target.checked) {
+    	updateProperty('showButton', true);
+    	setChecked(true);
+    }else{
+    	updateProperty('showButton', false);
+    	setChecked(false);
+    }
+  };
+
+	const singleLocation = (location, updateProperty, sampled) => {
+		console.log('location===>');
+		console.log(location);
+		if (typeof location.showButton !== 'undefined') {
+			setChecked(location.showButton);
+		} else {
+			setChecked(false);
+		}
+		return(
 		<>
 			<Switch value={locationTab} values={{content: 'Content', visual: 'Visual', function: 'Function'}} onChange={setLocationTab} />
 			<Tab active={locationTab === 'content'} className="option-group">
@@ -164,10 +186,29 @@ export const Locations = forwardRef(({setOpened, updateSetting, updateList, setJ
 				<Input label="Enlace" value={location.link} onChange={val => updateProperty('link', val)} placeholder="https://" />
 				<Input label="Teléfono" value={location.phone} onChange={val => updateProperty('phone', val)} placeholder="Número de teléfono" />
 				<Input label="Horario" value={location.hours} onChange={val => updateProperty('hours', val)} placeholder="Horario de apertura" />
+        <FormControlLabel
+        	className="form_label"
+          control={
+    				<SwitchMaterial
+    				  checked={checked}
+      				onChange={(e) => handleChange(e, updateProperty)}
+      				inputProps={{ 'aria-label': 'controlled' }}
+    				/>
+          }
+          label="Boton planes de pago"
+          labelPlacement="start"
+        />
 				<Suspense fallback={<p>Cargando...</p>}>
 					<Editor value={location.desc} onChange={val => updateProperty('desc', val)} placeholder={sampled?.desc?.replace(/<[^>]+>/g, '') || 'Descripción larga'} />
 				</Suspense>
-				{ customAttributes().map(a => <Input key={a} label={a} value={location[a]} onChange={val => updateProperty(a, val)} /> )}
+				{ customAttributes().map(a => {
+					if (a==='showButton') {
+						return '';
+					}
+					return(
+						<Input key={a} label={a} value={location[a]} onChange={val => updateProperty(a, val)} />
+					);
+				})}
     			<Button component="label" variant="contained" startIcon={<ImageIcon />}>
     			  Cargar imagén
     			  <VisuallyHiddenInput type="file" onChange={handleFileChange} id="fileInput"/>
@@ -208,7 +249,8 @@ export const Locations = forwardRef(({setOpened, updateSetting, updateList, setJ
 				<Switch label="Deshabilitar" value={location.disable || false} values={{true: 'Si', false: 'No'}} onChange={val => updateProperty('disable', val)} />
 			</Tab>
 		</>
-	)
+		);
+	}
 
 	return (
 		<Panel ref={ref}>

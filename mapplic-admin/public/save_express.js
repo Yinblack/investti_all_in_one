@@ -382,6 +382,12 @@ app.post('/sync-map', async (req, res) => {
                     location.precio_24meses = objetoConvertido['precio_24meses'];
                     location.precio_m2_36meses = objetoConvertido['precio_m2_36meses'];
                     location.precio_36meses = objetoConvertido['precio_36meses'];
+                    location.dto_contado = objetoConvertido['dto_contado'];
+                    location.dto_6meses = objetoConvertido['dto_6meses'];
+                    location.dto_12meses = objetoConvertido['dto_12meses'];
+                    location.dto_18meses = objetoConvertido['dto_18meses'];
+                    location.dto_24meses = objetoConvertido['dto_24meses'];
+                    location.dto_36meses = objetoConvertido['dto_36meses'];
                     location.estatus = objetoConvertido['estatus'];
                     location.activo = objetoConvertido['activo'];
                     if (objetoConvertido['estatus'] == 0) {
@@ -433,9 +439,16 @@ app.post('/sync-map', async (req, res) => {
                     precio_24meses: objetoConvertido['precio_24meses'],
                     precio_m2_36meses: objetoConvertido['precio_m2_36meses'],
                     precio_36meses: objetoConvertido['precio_36meses'],
+                    dto_contado: objetoConvertido['dto_contado'],
+                    dto_6meses: objetoConvertido['dto_6meses'],
+                    dto_12meses: objetoConvertido['dto_12meses'],
+                    dto_18meses: objetoConvertido['dto_18meses'],
+                    dto_24meses: objetoConvertido['dto_24meses'],
+                    dto_36meses: objetoConvertido['dto_36meses'],
                     estatus: objetoConvertido['estatus'],
                     activo: objetoConvertido['activo'],
-                    coord: [x_,y_]
+                    coord: [x_,y_],
+                    showButton: true
                 };
                 y_ = parseFloat((y_ + 0.05).toFixed(2));
                 if (objetoConvertido['estatus'] == 0) {
@@ -526,9 +539,16 @@ app.post('/scrape', async (req, res) => {
                 precio_24meses: objetoConvertido['precio_24meses'],
                 precio_m2_36meses: objetoConvertido['precio_m2_36meses'],
                 precio_36meses: objetoConvertido['precio_36meses'],
+                dto_contado: objetoConvertido['dto_contado'],
+                dto_6meses: objetoConvertido['dto_6meses'],
+                dto_12meses: objetoConvertido['dto_12meses'],
+                dto_18meses: objetoConvertido['dto_18meses'],
+                dto_24meses: objetoConvertido['dto_24meses'],
+                dto_36meses: objetoConvertido['dto_36meses'],
                 estatus: objetoConvertido['estatus'],
                 activo: objetoConvertido['activo'],
-                coord: [x_,y_]
+                coord: [x_,y_],
+                showButton: true
             };
             y_ = parseFloat((y_ + 0.05).toFixed(2));
             if (objetoConvertido['estatus'] == 0) {

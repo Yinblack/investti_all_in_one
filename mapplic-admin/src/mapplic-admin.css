@@ -1190,3 +1190,11 @@ textarea.code {
 .panel.main > .panel-child {
 	left: 54px;
 }
+
+label.form_label{
+	flex-direction: row;
+}
+label.form_label>span.MuiTypography-root{
+	font-size: 13px;
+	color: #4b5563;
+}
