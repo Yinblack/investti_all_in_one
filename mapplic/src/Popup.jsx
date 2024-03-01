@@ -43,53 +43,68 @@ export const Popup = ({location, type}) => {
 	  return { plan, dscto, precio_m2, enganche, promo, precio_total, enganche_7dias, no_meses, monto_mensual };
 	}
 
-	// const rows = [
-	//   createData('Contado', '9%', '$7,862.39', '100%', 'Precio de Contado', '$2,047,916.72', '$2,047,916.72', '1', '$0.00'),
-	//   createData('12 meses', '4%', '$8,294.39', '20%', 'Precio de 12 meses', '$2,160,439.76', '$432,087.95', '12', '$144,029.32'),
-	//   createData('18 meses', '1.7%', '$8,493.11', '20%', 'Precio de 18 meses', '$2,212,200.36', '$442,440.07', '18', '$98,320.02'),
-	//   createData('24 meses', '-', '$8,639.99', '25%', 'Precio de 24 meses', '$2,250,458.20', '$562,614.55', '24', '$70,326.82'),
-	//   createData('36 meses', '-', '$9,028.79', '25%', 'Precio de 36 meses', '$2,351,728.93', '$587,932.23', '36', '$48,994.35')
-	// ];
+	function PercentageFormatter({ value }) {
+	  // Verificamos si el valor es numérico
+	  if (typeof value === 'number') {
+	    // Formateamos el número con dos decimales y agregamos el símbolo "%"
+	    const formattedValue = value.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 }) + '%';
+	    return <span>{formattedValue}</span>;
+	  } else {
+	    return <span>{value}</span>; // Devolvemos el valor sin cambios si no es numérico
+	  }
+	}
+
+	function CurrencyFormatter({ value }) {
+	  // Verificamos si el valor es numérico
+	  if (typeof value === 'number') {
+	    // Formateamos el número como moneda con 2 decimales y el símbolo "$"
+	    const formattedValue = value.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2 });
+	    return <span>{formattedValue}</span>;
+	  } else {
+	    return <span>{value}</span>; // Devolvemos el valor sin cambios si no es numérico
+	  }
+	}
+
 	const rows = [];
-	if (location.precio_contado !== undefined && location.precio_contado!==null && ocation.precio_contado!=='') {
+	if (location.precio_contado !== undefined && location.precio_contado!==null && location.precio_contado!=='') {
 		var enganche = 100;
 		var precio_mensualidad = 0;
-	  rows.push(createData('Contado', location.dto_contado, location.precio_m2_contado, location.enganche_contado, 'Precio de contado', location.precio_contado, enganche+'%', 1, precio_mensualidad));
+	  rows.push(createData('Contado', <PercentageFormatter value={parseFloat(location.dto_contado)} />, <CurrencyFormatter value={parseFloat(location.precio_m2_contado)} />, <PercentageFormatter value={parseFloat(location.enganche_contado)} />, 'Precio de contado', <CurrencyFormatter value={parseFloat(location.precio_contado)} />, <CurrencyFormatter value={parseFloat(location.precio_contado)} />, 1, <CurrencyFormatter value={parseFloat(precio_mensualidad)} />));
 	}
 
-	if (location.precio_6meses !== undefined && location.precio_6meses!==null && ocation.precio_6meses!=='') {
-		var enganche = parseFloat(location.precio_6meses)*parseFloat(location.enganche_6meses);
+	if (location.precio_6meses !== undefined && location.precio_6meses!==null && location.precio_6meses!=='') {
+		var enganche = parseFloat(location.precio_6meses)*(parseFloat(location.enganche_6meses)/100);
 		var precio_menos_enganche = parseFloat(location.precio_6meses) - enganche;
 		var precio_mensualidad = precio_menos_enganche / 6;
-	  rows.push(createData('6 meses', location.dto_6meses, location.precio_m2_6meses, location.enganche_6meses, 'Precio de 6 meses', location.precio_6meses, enganche+'%', 6, precio_mensualidad));
+	  rows.push(createData('6 meses', <PercentageFormatter value={parseFloat(location.dto_6meses)} />, <CurrencyFormatter value={parseFloat(location.precio_m2_6meses)} />, <PercentageFormatter value={parseFloat(location.enganche_6meses)} />, 'Precio de 6 meses', <CurrencyFormatter value={parseFloat(location.precio_6meses)} />, <CurrencyFormatter value={enganche} />, 6, <CurrencyFormatter value={parseFloat(precio_mensualidad)} />));
 	}
 
-	if (location.precio_12meses !== undefined && location.precio_12meses!==null && ocation.precio_12meses!=='') {
-		var enganche = parseFloat(location.precio_12meses)*parseFloat(location.enganche_12meses);
+	if (location.precio_12meses !== undefined && location.precio_12meses!==null && location.precio_12meses!=='') {
+		var enganche = parseFloat(location.precio_12meses)*(parseFloat(location.enganche_12meses)/100);
 		var precio_menos_enganche = parseFloat(location.precio_12meses) - enganche;
 		var precio_mensualidad = precio_menos_enganche / 12;
-	  rows.push(createData('12 meses', location.dto_12meses, location.precio_m2_12meses, location.enganche_12meses, 'Precio de 12 meses', location.precio_12meses, enganche+'%', 12, precio_mensualidad));
+	  rows.push(createData('12 meses', <PercentageFormatter value={parseFloat(location.dto_12meses)} />, <CurrencyFormatter value={parseFloat(location.precio_m2_12meses)} />, <PercentageFormatter value={parseFloat(location.enganche_12meses)} />, 'Precio de 12 meses', <CurrencyFormatter value={parseFloat(location.precio_12meses)} />, <CurrencyFormatter value={enganche} />, 12, <CurrencyFormatter value={parseFloat(precio_mensualidad)} />));
 	}	
 
-	if (location.precio_18meses !== undefined && location.precio_18meses!==null && ocation.precio_18meses!=='') {
-		var enganche = parseFloat(location.precio_18meses)*parseFloat(location.enganche_18meses);
+	if (location.precio_18meses !== undefined && location.precio_18meses!==null && location.precio_18meses!=='') {
+		var enganche = parseFloat(location.precio_18meses)*(parseFloat(location.enganche_18meses)/100);
 		var precio_menos_enganche = parseFloat(location.precio_18meses) - enganche;
 		var precio_mensualidad = precio_menos_enganche / 18;
-	  rows.push(createData('18 meses', location.dto_18meses, location.precio_m2_18meses, location.enganche_18meses, 'Precio de 18 meses', location.precio_18meses, enganche+'%', 18, precio_mensualidad));
+	  rows.push(createData('18 meses', <PercentageFormatter value={parseFloat(location.dto_18meses)} />, <CurrencyFormatter value={parseFloat(location.precio_m2_18meses)} />, <PercentageFormatter value={parseFloat(location.enganche_18meses)} />, 'Precio de 18 meses', <CurrencyFormatter value={parseFloat(location.precio_18meses)} />, <CurrencyFormatter value={enganche} />, 18, <CurrencyFormatter value={parseFloat(precio_mensualidad)} />));
 	}
 
-	if (location.precio_24meses !== undefined && location.precio_24meses!==null && ocation.precio_24meses!=='') {
-		var enganche = parseFloat(location.precio_24meses)*parseFloat(location.enganche_24meses);
+	if (location.precio_24meses !== undefined && location.precio_24meses!==null && location.precio_24meses!=='') {
+		var enganche = parseFloat(location.precio_24meses)*(parseFloat(location.enganche_24meses)/100);
 		var precio_menos_enganche = parseFloat(location.precio_24meses) - enganche;
 		var precio_mensualidad = precio_menos_enganche / 24;
-	  rows.push(createData('24 meses', location.dto_24meses, location.precio_m2_24meses, location.enganche_24meses, 'Precio de 24 meses', location.precio_24meses, enganche+'%', 24, precio_mensualidad));
+	  rows.push(createData('24 meses', <PercentageFormatter value={parseFloat(location.dto_24meses)} />, <CurrencyFormatter value={parseFloat(location.precio_m2_24meses)} />, <PercentageFormatter value={parseFloat(location.enganche_24meses)} />, 'Precio de 24 meses', <CurrencyFormatter value={parseFloat(location.precio_24meses)} />, <CurrencyFormatter value={enganche} />, 24, <CurrencyFormatter value={parseFloat(precio_mensualidad)} />));
 	}
 
-	if (location.precio_36meses !== undefined && location.precio_36meses!==null && ocation.precio_36meses!=='') {
-		var enganche = parseFloat(location.precio_36meses)*parseFloat(location.enganche_36meses);
+	if (location.precio_36meses !== undefined && location.precio_36meses!==null && location.precio_36meses!=='') {
+		var enganche = parseFloat(location.precio_36meses)*(parseFloat(location.enganche_36meses)/100);
 		var precio_menos_enganche = parseFloat(location.precio_36meses) - enganche;
 		var precio_mensualidad = precio_menos_enganche / 36;
-	  rows.push(createData('36 meses', location.dto_36meses, location.precio_m2_36meses, location.enganche_36meses, 'Precio de 36 meses', location.precio_36meses, enganche+'%', 36, precio_mensualidad));
+	  rows.push(createData('36 meses', <PercentageFormatter value={parseFloat(location.dto_36meses)} />, <CurrencyFormatter value={parseFloat(location.precio_m2_36meses)} />, <PercentageFormatter value={parseFloat(location.enganche_36meses)} />, 'Precio de 36 meses', <CurrencyFormatter value={parseFloat(location.precio_36meses)} />, <CurrencyFormatter value={enganche} />, 36, <CurrencyFormatter value={parseFloat(precio_mensualidad)} />));
 	}
 
 	return (
