@@ -388,6 +388,12 @@ app.post('/sync-map', async (req, res) => {
                     location.dto_18meses = objetoConvertido['dto_18meses'];
                     location.dto_24meses = objetoConvertido['dto_24meses'];
                     location.dto_36meses = objetoConvertido['dto_36meses'];
+                    location.enganche_contado = objetoConvertido['enganche_contado'];
+                    location.enganche_6meses = objetoConvertido['enganche_6meses'];
+                    location.enganche_12meses = objetoConvertido['enganche_12meses'];
+                    location.enganche_18meses = objetoConvertido['enganche_18meses'];
+                    location.enganche_24meses = objetoConvertido['enganche_24meses'];
+                    location.enganche_36meses = objetoConvertido['enganche_36meses'];
                     location.estatus = objetoConvertido['estatus'];
                     location.activo = objetoConvertido['activo'];
                     if (objetoConvertido['estatus'] == 0) {
@@ -445,6 +451,12 @@ app.post('/sync-map', async (req, res) => {
                     dto_18meses: objetoConvertido['dto_18meses'],
                     dto_24meses: objetoConvertido['dto_24meses'],
                     dto_36meses: objetoConvertido['dto_36meses'],
+                    enganche_contado: objetoConvertido['enganche_contado'],
+                    enganche_6meses: objetoConvertido['enganche_6meses'],
+                    enganche_12meses: objetoConvertido['enganche_12meses'],
+                    enganche_18meses: objetoConvertido['enganche_18meses'],
+                    enganche_24meses: objetoConvertido['enganche_24meses'],
+                    enganche_36meses: objetoConvertido['enganche_36meses'],
                     estatus: objetoConvertido['estatus'],
                     activo: objetoConvertido['activo'],
                     coord: [x_,y_],
@@ -545,6 +557,12 @@ app.post('/scrape', async (req, res) => {
                 dto_18meses: objetoConvertido['dto_18meses'],
                 dto_24meses: objetoConvertido['dto_24meses'],
                 dto_36meses: objetoConvertido['dto_36meses'],
+                enganche_contado: objetoConvertido['enganche_contado'],
+                enganche_6meses: objetoConvertido['enganche_6meses'],
+                enganche_12meses: objetoConvertido['enganche_12meses'],
+                enganche_18meses: objetoConvertido['enganche_18meses'],
+                enganche_24meses: objetoConvertido['enganche_24meses'],
+                enganche_36meses: objetoConvertido['enganche_36meses'],
                 estatus: objetoConvertido['estatus'],
                 activo: objetoConvertido['activo'],
                 coord: [x_,y_],
