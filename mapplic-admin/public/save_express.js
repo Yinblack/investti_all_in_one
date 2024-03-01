@@ -396,6 +396,7 @@ app.post('/sync-map', async (req, res) => {
                     location.enganche_36meses = objetoConvertido['enganche_36meses'];
                     location.estatus = objetoConvertido['estatus'];
                     location.activo = objetoConvertido['activo'];
+                    location.scale = objetoConvertido['scale'];
                     if (objetoConvertido['estatus'] == 0) {
                         location.style = 'reservado';
                         location.group = ["Reservado"];
@@ -460,7 +461,8 @@ app.post('/sync-map', async (req, res) => {
                     estatus: objetoConvertido['estatus'],
                     activo: objetoConvertido['activo'],
                     coord: [x_,y_],
-                    showButton: true
+                    showButton: true,
+                    scale: 0.5
                 };
                 y_ = parseFloat((y_ + 0.05).toFixed(2));
                 if (objetoConvertido['estatus'] == 0) {
@@ -566,7 +568,8 @@ app.post('/scrape', async (req, res) => {
                 estatus: objetoConvertido['estatus'],
                 activo: objetoConvertido['activo'],
                 coord: [x_,y_],
-                showButton: true
+                showButton: true,
+                scale: 0.5
             };
             y_ = parseFloat((y_ + 0.05).toFixed(2));
             if (objetoConvertido['estatus'] == 0) {
