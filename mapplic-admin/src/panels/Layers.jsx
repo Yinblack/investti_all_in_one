@@ -100,7 +100,7 @@ export const Layers = forwardRef(({setOpened, updateSetting, updateList}, ref) =
 			<Upload label="URL Imagen" disabled value={layer.file} onChange={val => updateProperty('file', val)} placeholder="Map URL" button={true} />
     	<Button component="label" variant="contained" startIcon={<ImageIcon />}>
     	  Cargar imagén
-    	  <VisuallyHiddenInput type="file" onChange={handleFileChange} id="fileInput"/>
+    	  <VisuallyHiddenInput type="file" onChange={handleFileChange} id="fileInput" accept="image/jpeg, image/jpg, image/webp, image/avif, image/png, image/svg+xml"/>
     	</Button>
     	<Dialog
     	  sx={{ '& .MuiDialog-paper': { width: '80%', maxHeight: 435 } }}
