@@ -144,7 +144,7 @@ app.post('/map-save', async (req, res) => {
     });
 });
 
-app.post('/layer-image___', upload.single('image'), async (req, res) => {
+app.post('/layer-image', upload.single('image'), async (req, res) => {
   try {
 
     if (!req.file) {
@@ -183,7 +183,7 @@ app.post('/layer-image___', upload.single('image'), async (req, res) => {
   }
 });
 
-app.post('/layer-image', upload.single('image'), async (req, res) => {
+app.post('/layer-image___', upload.single('image'), async (req, res) => {
   try {
 
     const idLayer = req.body.layer_id;
