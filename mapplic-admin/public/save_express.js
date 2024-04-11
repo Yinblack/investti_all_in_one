@@ -57,13 +57,13 @@ const upload = multer({
         files: 1, // Permite subir solo un archivo a la vez
     },
     fileFilter: (req, file, cb) => {
-        const allowedFileTypes = /jpeg|jpg|png|svg/;
+        const allowedFileTypes = /jpeg|jpg|webp|avif|png|svg/;
         const extname = allowedFileTypes.test(path.extname(file.originalname).toLowerCase());
         const mimetype = allowedFileTypes.test(file.mimetype);
         if (extname && mimetype) {
             return cb(null, true);
         } else {
-            cb('Error: El archivo debe ser una imagen de formato jpeg, jpg, png o svg.');
+            cb('Error: Los formatos permitidos son: jpeg, jpg, webp, avif, png y svg.');
         }
     },
 });
