@@ -3,7 +3,8 @@ import { ControlPanel } from './ControlPanel'
 import { AdminBar } from './AdminBar'
 import { MapplicStore } from '../../mapplic/src/MapplicStore'
 import '../../mapplic/src/mapplic.css'
-import './mapplic-admin.css'
+import './mapplic-admin.scss'
+import './custom.scss'
 import { UploadFieldContextProvider } from './UploadFieldContext'
 
 import Dialog from '@mui/material/Dialog';

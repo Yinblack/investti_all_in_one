@@ -1,0 +1,35 @@
+@mixin block_ctrl() {
+  display: inline-block;
+  position: relative;
+  float: left;
+  width: 100%;
+}
+@mixin absolute_center() {
+  display: inline-block;
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  top: 0px;
+  margin: auto;
+}
+@mixin ease($time) {
+  -webkit-transition: all $time ease;
+     -moz-transition: all $time ease;
+      -ms-transition: all $time ease;
+       -o-transition: all $time ease;
+          transition: all $time ease;
+}
+@mixin easeOpacity($time) {
+  -webkit-transition: opacity $time ease;
+     -moz-transition: opacity $time ease;
+      -ms-transition: opacity $time ease;
+       -o-transition: opacity $time ease;
+          transition: opacity $time ease;
+}
+.block_ctrl{
+  @include block_ctrl();
+}
+.absolute_center{
+  @include absolute_center();
+}

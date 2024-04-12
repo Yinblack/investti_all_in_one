@@ -1,0 +1,16 @@
+@use './gral'; // Importa el archivo gral.scss
+div.code_box{
+	@include gral.block_ctrl();
+	>textarea{
+		@include gral.block_ctrl();
+	}
+	>button{
+		display: inline-block;
+		position: relative;
+		float: right;
+		margin-top: 10px;
+    	background-color: #1f2937;
+    	color: #DDDDDD;
+	}
+}
+

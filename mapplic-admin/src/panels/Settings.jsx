@@ -8,6 +8,7 @@ import Button from '@mui/material/Button';
 import CloudSyncIcon from '@mui/icons-material/CloudSync';
 import { controlZones, TitleToggle, unique, filled, validClass, Conditional } from './utils'
 import useMapplicStore from '../../../mapplic/src/MapplicStore'
+import { alert, notice, info, success, error, defaultModules, defaults } from '@pnotify/core';
 
 import { publicServices } from '../services/publicServices';
 
@@ -55,6 +56,50 @@ export const Settings = forwardRef(({setOpened, updateSetting, updateList, setJs
 			<Input label="Elemento" active={breakpoint.portrait} type="number" value={breakpoint.element} min="1" placeholder="Auto" onChange={val => updateProperty('element', parseFloat(val))} suffix="H" />
 		</div>
 	)
+
+	const urlParams = new URLSearchParams(window.location.search);
+	const mapParam = urlParams.get('map');
+  	function formatToURL(str) {
+  	  let formattedStr = str.toLowerCase();
+  	  formattedStr = formattedStr.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  	  formattedStr = formattedStr.replace(/\s+/g, "-");
+  	  return formattedStr;
+  	}
+	const mapName = mapParam.replace('.json', '');
+	const urlMap=formatToURL(mapName);
+
+	const CodeBox = () => {
+		const [code, setCode] = useState(`<script>var iframe = document.createElement('iframe');iframe.src = '${import.meta.env.REACT_APP_API_CALLS}/lote-${urlMap}';iframe.width = '100%';var miDiv = document.getElementById('b9-map');iframe.setAttribute('allowfullscreen', 'true');iframe.setAttribute('webkitallowfullscreen', 'true');iframe.setAttribute('mozallowfullscreen', 'true');iframe.setAttribute('oallowfullscreen', 'true');iframe.setAttribute('msallowfullscreen', 'true');iframe.setAttribute('frameborder', '0');miDiv.appendChild(iframe);iframe.onload = function() {var iframeDocument = iframe.contentWindow.document;var iframeBody = iframeDocument.body;var iframeHeight = iframeBody.scrollHeight;miDiv.style.height = iframeHeight + 'px';};</script>`);
+	  	const handleCopyClick = () => {
+	  		navigator.clipboard.writeText(code)
+	  	    .then(() => {
+      			const mySuccess = success({
+      			  text: 'Código copiado al portapapeles',
+      			  delay: 1000,
+      			  closer: true,
+      			  closerHover: true
+      			});
+	  	    })
+	  	    .catch((error) => {
+	  	      	console.error('Error al copiar el código:', error);
+	  	    });
+	  	};
+	  	return (
+	  	  	<div className="code_box">
+	  	  	  	<textarea
+	  	  	  	  value={code}
+	  	  	  	  readOnly={true}
+	  	  	  	  rows={10}
+	  	  	  	  cols={50}
+	  	  	  	  style={{ fontFamily: 'monospace' }}
+	  	  	  	/>
+	  	  		<Button onClick={handleCopyClick} variant="outlined" size="small">
+      	  		  Copiar
+      	  		</Button>
+	  	  	</div>
+	  	);
+	};
+
 
 	return (
 		<Panel ref={ref}>
@@ -122,6 +167,19 @@ export const Settings = forwardRef(({setOpened, updateSetting, updateList, setJs
 							<Input label="Botón" value={data.settings.moreText} onChange={val => updateSetting('moreText', val)} placeholder="Más" />
 							<Input label="Buscar" value={data.settings.searchText} onChange={val => updateSetting('searchText', val)} placeholder="Buscar" />
 							<Input label="Borrar todo" value={data.settings.clearText} onChange={val => updateSetting('clearText', val)} placeholder="Borrar todo" />
+						</div>
+					</div>
+
+					<div className="mapplic-panel-group">
+						<h4>Inserción</h4>
+						<div className="mapplic-panel-options">
+							<div className="block_ctrl">
+								<h5>1. Crea un elemento div con el id: "b9-map".</h5>
+							</div>
+							<div className="block_ctrl">
+								<h5>2. Agrega el codigo de inserción a tu web:</h5>
+							</div>
+							<CodeBox/>
 						</div>
 					</div>
 				</div>
