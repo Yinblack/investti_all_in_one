@@ -67,9 +67,12 @@ export const Settings = forwardRef(({setOpened, updateSetting, updateList, setJs
   	}
 	const mapName = mapParam.replace('.json', '');
 	const urlMap=formatToURL(mapName);
-
 	const CodeBox = () => {
-		const [code, setCode] = useState(`<script>var iframe = document.createElement('iframe');iframe.src = '${import.meta.env.REACT_APP_API_CALLS}/lote-${urlMap}';iframe.width = '100%';var miDiv = document.getElementById('b9-map');iframe.setAttribute('allowfullscreen', 'true');iframe.setAttribute('webkitallowfullscreen', 'true');iframe.setAttribute('mozallowfullscreen', 'true');iframe.setAttribute('oallowfullscreen', 'true');iframe.setAttribute('msallowfullscreen', 'true');iframe.setAttribute('frameborder', '0');miDiv.appendChild(iframe);iframe.onload = function() {var iframeDocument = iframe.contentWindow.document;var iframeBody = iframeDocument.body;var iframeHeight = iframeBody.scrollHeight;miDiv.style.height = iframeHeight + 'px';};</script>`);
+		let apiUrl = import.meta.env.REACT_APP_API_CALLS;
+		if (apiUrl.includes(':2053')) {
+		    apiUrl = apiUrl.replace(':2053', '');
+		}
+		const [code, setCode] = useState(`<script>var iframe = document.createElement('iframe');iframe.src = '${apiUrl}lote-${urlMap}';iframe.width = '100%';var miDiv = document.getElementById('b9-map');iframe.setAttribute('allowfullscreen', 'true');iframe.setAttribute('webkitallowfullscreen', 'true');iframe.setAttribute('mozallowfullscreen', 'true');iframe.setAttribute('oallowfullscreen', 'true');iframe.setAttribute('msallowfullscreen', 'true');iframe.setAttribute('frameborder', '0');miDiv.appendChild(iframe);iframe.onload = function() {var iframeDocument = iframe.contentWindow.document;var iframeBody = iframeDocument.body;var iframeHeight = iframeBody.scrollHeight;miDiv.style.height = iframeHeight + 'px';};</script>`);
 	  	const handleCopyClick = () => {
 	  		navigator.clipboard.writeText(code)
 	  	    .then(() => {
